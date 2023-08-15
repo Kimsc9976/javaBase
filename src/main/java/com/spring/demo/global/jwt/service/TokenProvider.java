@@ -117,7 +117,7 @@ public class TokenProvider  {
 
         try{
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            System.out.println(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody());
+//            System.out.println(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody());
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             throw new ApiException(JWT_INVALID);
         } catch (ExpiredJwtException e) {
@@ -156,7 +156,6 @@ public class TokenProvider  {
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
-
         if(claims.get(AUTHORITIES_KEY) == null){
             throw new ApiException(NO_AUTHORIZE);
         }
@@ -169,8 +168,8 @@ public class TokenProvider  {
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-
+        UserDetails principal = new User((String) claims.get(USER_EMAIL), "", authorities);
+//        System.out.println("프린시펄 확인" + principal + "\n"+authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 
     }
@@ -180,7 +179,7 @@ public class TokenProvider  {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
+//        System.out.println("====="+authorities);
         String email = authentication.getName();
 
         long now = (new Date()).getTime();
