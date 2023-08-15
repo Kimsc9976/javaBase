@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +27,14 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return web -> {
+            web.ignoring()
+                    .requestMatchers(WHITELIST);
+        };
+    }
+
 
     public SecurityConfig(TokenProvider tokenProvider, CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.tokenProvider = tokenProvider;
@@ -32,40 +42,25 @@ public class SecurityConfig {
         this.passwordEncoder = passwordEncoder;
     }
 
-
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder);
-        return authProvider;
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("========================== 우선순위 확인 1======================");
         // Filter
         http
+            .csrf(AbstractHttpConfigurer::disable) // csrf disable
             .authorizeHttpRequests((authz) -> authz
                 .requestMatchers("/api/member/signin").permitAll()
                 .requestMatchers("/api/member/inform").hasRole("USER")
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
             )
             .addFilterBefore(new TokenAuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
-        // 기본 제거
-        http.httpBasic(withDefaults());
+//        // 기본 제거
+//        http.httpBasic(withDefaults());
 
         // cors header access
 //        http.cors().configurationSource(corsConfigurationSource());
 
-        // csrf disable
-        http.csrf(AbstractHttpConfigurer::disable);
 
         // cors disable
 //        http.cors(cors -> cors.disable());
@@ -84,4 +79,29 @@ public class SecurityConfig {
 //        });
         return http.build();
     }
+
+
+
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
+
+    private static final String[] WHITELIST = {
+            // Login
+            "/api/member/signin",
+            // Swagger
+            "/api/v3/auth/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    };
 }
