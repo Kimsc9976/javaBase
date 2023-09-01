@@ -10,9 +10,14 @@ import com.spring.demo.domain.member.exception.ApiException;
 import com.spring.demo.domain.member.repository.MemberRepository;
 import com.spring.demo.global.jwt.dto.TokenDTO;
 import com.spring.demo.global.jwt.service.TokenProvider;
+import com.spring.demo.global.redis.dto.AuthDTO;
+import com.spring.demo.global.redis.service.AuthService;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,12 +28,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.spring.demo.domain.member.exception.ErrorCode.*;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
 
@@ -37,8 +44,13 @@ public class MemberServiceImpl implements MemberService{
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    private final EmailService emailService;
+    private final AuthService authService;
+
     @Override
-    public BaseResponseDTO<String> signUp(MemberJoinDTO memberInfo) throws RuntimeException {
+    public BaseResponseDTO<String> signUp(MemberJoinDTO memberInfo)
+            throws RuntimeException {
         /*
         example
          memberInfo = {
@@ -49,7 +61,7 @@ public class MemberServiceImpl implements MemberService{
          }
         */
         if(memberRepository.findByEmail(memberInfo.getEmail()).isPresent()){
-            return new BaseResponseDTO<>("이미 가입된 회원입니다.", 400);
+            throw new ApiException(REGISTER_DUPLICATED_EMAIL);
         }
 
         String encryptedPassword = passwordEncoder.encode(memberInfo.getPassword());
@@ -60,6 +72,43 @@ public class MemberServiceImpl implements MemberService{
 
         return new BaseResponseDTO<>("회원가입이 완료되었습니다.", 200);
     }
+
+    @Override
+    public BaseResponseDTO<String> verifyMember(MemberInformDTO memberInfo) {
+        /*
+        example
+         memberInfo = {
+            email : example@example.com
+         }
+        */
+        if(memberRepository.findByEmail(memberInfo.getEmail()).isPresent()){
+            throw new ApiException(REGISTER_DUPLICATED_EMAIL);
+        }
+        return new BaseResponseDTO<>("사용 가능한 Email 입니다.", 200);
+    }
+
+    @Override
+    public BaseResponseDTO<String> verifyEmail(AuthDTO authInfo) {
+        /*
+        example
+         authNumber = {
+            email : example@email.com;
+            authNum : authNum;
+            type : "certification";
+         }
+        */
+        String email = authInfo.getEmail();
+        // 인증 코드 조회
+        String authCode = authService.getAuthCode(email);
+        if (!Objects.equals(authCode, authInfo.getAuthNum())){
+
+            throw new ApiException(EMAIL_INPUT_ERROR);
+        }
+
+        log.info("이메일 인증 완료.");
+        return new BaseResponseDTO<>("이메일 인증이 완료되었습니다.", 200);
+    }
+
     @Override
     public BaseResponseDTO<TokenDTO> signIn(MemberLoginDTO memberInfo, HttpServletResponse httpResponse) throws RuntimeException { // 이후 내껄로 수정해야함
         /*
@@ -96,6 +145,7 @@ public class MemberServiceImpl implements MemberService{
             } else {
                 // DB에 해당 이메일을 가진 Member 가 없는 경우의 처리
                 throw new ApiException(NO_MEMBER_ERROR);
+
             }
 
             // 6. 토큰 정보를 Header 로 등록
@@ -106,23 +156,43 @@ public class MemberServiceImpl implements MemberService{
         }catch (Exception e){
             throw new ApiException(LOGIN_INFO_ERROR);
         }
+    }
 
+    @Override
+    public BaseResponseDTO<?> signOut(HttpServletRequest httpRequest) {
+        // 토큰 탐색
+        String accessToken = tokenProvider.getHeaderToken(httpRequest, "Access");
+        String refreshToken = tokenProvider.getHeaderToken(httpRequest, "Refresh");
 
+        String email = (String) tokenProvider.parseClaims(accessToken).get("user_email");
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+
+        if (optionalMember.isPresent()){
+            Member member = optionalMember.get();
+            member.updateMemberToken(null);
+            memberRepository.save(member);
+            return new BaseResponseDTO<>("로그아웃이 완료되었습니다.", 200);
+        }
+
+        throw new ApiException(NO_MEMBER_ERROR);
     }
 
     @Override
     public BaseResponseDTO<Member> getInfo(MemberInformDTO memberInfo) {
+        /*
+        example
+         memberInfo = {
+            email : example@example.com
+         }
+        */
+        Optional<Member> optionalMember = memberRepository.findByEmail(memberInfo.getEmail());
+        System.out.println("Member info: " + optionalMember);
 
-        Optional<Member> member = memberRepository.findByEmail(memberInfo.getEmail());
-        System.out.println("Member info: " + member);
-
-        if (member.isEmpty()){ throw new ApiException(NO_MEMBER_ERROR); }
+        if (optionalMember.isEmpty()){ throw new ApiException(NO_MEMBER_ERROR); }
 //        System.out.println("Member info: " + member.get());
 
-        return new BaseResponseDTO<>(memberInfo.getEmail() + "의 정보입니다.", 200, member.get());
+        return new BaseResponseDTO<>(memberInfo.getEmail() + "의 정보입니다.", 200, optionalMember.get());
 //        return new BaseResponseDTO("$s 님의 정보를 제공해 드립니다", 200, member);
     }
-
-
 
 }

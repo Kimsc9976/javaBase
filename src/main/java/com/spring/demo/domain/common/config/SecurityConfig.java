@@ -58,7 +58,7 @@ public class SecurityConfig {
 //        // 기본 제거
 //        http.httpBasic(withDefaults());
 
-        // cors header access
+//         cors header access
 //        http.cors().configurationSource(corsConfigurationSource());
 
 
@@ -98,6 +98,9 @@ public class SecurityConfig {
     private static final String[] WHITELIST = {
             // Login
             "/api/member/signin",
+            "/api/member/verifyMember",
+            "/api/member/verifyAuthNum",
+
             // Swagger
             "/api/v3/auth/**",
             "/v3/api-docs/**",

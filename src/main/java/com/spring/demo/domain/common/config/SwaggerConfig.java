@@ -21,7 +21,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .components(new Components())
                 .info(info);
-
+// 지금은 Swagger 접근을 모든 사람이 할 수 있게 해뒀는데, 이 부분은 이후 관리자나 우회하기 위해서는 apikey를 등록해서 사용해야한다.
 //        SecurityScheme apiKey = new SecurityScheme()
 //                .type(SecurityScheme.Type.APIKEY)
 //                .in(SecurityScheme.In.HEADER)

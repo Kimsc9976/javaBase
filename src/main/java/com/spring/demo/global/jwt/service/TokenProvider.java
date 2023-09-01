@@ -129,7 +129,7 @@ public class TokenProvider  {
         }
     }
 
-    Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String accessToken) {
         try{
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e){
@@ -187,8 +187,16 @@ public class TokenProvider  {
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TIME);
         return createAccessToken(authorities, email, accessTokenExpiresIn);
-
     }
+    
+// 이후 레디스 추가시 수행하는 것이 적절할 듯
+//    public void expireToken(String token){
+//        Claims claims = parseClaims(token);
+//
+//        if (claims.get(AUTHORITIES_KEY) != null){
+//
+//        }
+//    }
 }
 
 

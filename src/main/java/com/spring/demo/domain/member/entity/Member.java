@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Member extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
+    private Long id;
 
     @Column(unique = true, length = 50, nullable = false)
     private String email;

@@ -23,6 +23,7 @@ public class ApiExceptionHandler {
                         .status(e.getError().getStatus())
                         .errorCode(e.getError().getCode())
                         .message(e.getError().getMessage())
+                        .statusCode(e.getError().getStatus().value())
                         .build());
     }
 }

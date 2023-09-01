@@ -11,11 +11,13 @@ public class ApiExceptionEntity {
     private final HttpStatus status;
     private final String errorCode;
     private final String message;
+    private final Integer statusCode;
 
     @Builder
-    public ApiExceptionEntity(HttpStatus status, String errorCode, String message){
+    public ApiExceptionEntity(HttpStatus status, String errorCode, String message, Integer statusCode){
         this.status = status;
         this.errorCode = errorCode;
         this.message = message;
+        this.statusCode = statusCode;
     }
 }
