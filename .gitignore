@@ -1,5 +1,7 @@
 HELP.md
 .gradle
+application.properties
+
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -23,7 +25,7 @@ bin/
 *.iml
 *.ipr
 out/
-!**/src/main/**/out/
+!**/src/main/**/out/g
 !**/src/test/**/out/
 
 ### NetBeans ###
