@@ -55,6 +55,7 @@ public class SecurityConfig {
             )
             .addFilterBefore(new TokenAuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
+
 //        // 기본 제거
 //        http.httpBasic(withDefaults());
 
@@ -100,6 +101,10 @@ public class SecurityConfig {
             "/api/member/signin",
             "/api/member/verifyMember",
             "/api/member/verifyAuthNum",
+            "/oauth/**",
+
+            // favicon
+            "/favicon.ico",
 
             // Swagger
             "/api/v3/auth/**",
