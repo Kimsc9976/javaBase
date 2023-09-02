@@ -89,7 +89,7 @@ public class KakaoLoginServiceImpl implements OAuthService {
     }
 
     public Member getKakaoMember(KakaoTokenDTO kakaoTokenDTO) {
-        
+
         String kakaoAccessToken = kakaoTokenDTO.getAccessToken(); // 액세스 토큰 추출 로직 구현 필요
 
         KakaoUserProfileDTO kakaoUserInfo = getUserInfo(kakaoAccessToken);
