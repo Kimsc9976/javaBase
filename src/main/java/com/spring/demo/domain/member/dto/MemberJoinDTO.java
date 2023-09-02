@@ -1,5 +1,6 @@
 package com.spring.demo.domain.member.dto;
 
+import com.spring.demo.domain.member.constant.MemberType;
 import com.spring.demo.domain.member.entity.Member;
 import com.spring.demo.domain.member.constant.Role;
 import lombok.Builder;
@@ -24,7 +25,7 @@ public class MemberJoinDTO {
         this.nickname = nickname;
     }
 
-    public Member toEntity(String password){
+    public Member toEntity(String password, MemberType memberType){
 //        System.out.println("이거 들어가나요");
         return Member.builder()
                 .email(email)
@@ -32,6 +33,7 @@ public class MemberJoinDTO {
                 .name(name)
                 .nickname(nickname)
                 .role(Role.from("USER"))
+                .memberType(memberType)
                 .build();
     }
 }
