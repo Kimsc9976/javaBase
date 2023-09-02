@@ -1,4 +1,4 @@
-package com.spring.demo.api.member.dto;
+package com.spring.demo.api.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

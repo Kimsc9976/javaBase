@@ -1,6 +1,6 @@
 package com.spring.demo.api.member.service;
 
-import com.spring.demo.api.member.dto.BaseResponseDTO;
+import com.spring.demo.api.dto.BaseResponseDTO;
 import com.spring.demo.domain.member.constant.MemberType;
 import com.spring.demo.domain.member.dto.MemberInformDTO;
 import com.spring.demo.domain.member.dto.MemberJoinDTO;
@@ -13,22 +13,18 @@ import com.spring.demo.global.jwt.dto.TokenDTO;
 import com.spring.demo.global.jwt.service.TokenProvider;
 import com.spring.demo.global.redis.dto.AuthDTO;
 import com.spring.demo.global.redis.service.AuthService;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 

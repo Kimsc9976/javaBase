@@ -1,6 +1,6 @@
 package com.spring.demo.api.member.controller;
 
-import com.spring.demo.api.member.dto.BaseResponseDTO;
+import com.spring.demo.api.dto.BaseResponseDTO;
 import com.spring.demo.api.member.service.EmailService;
 import com.spring.demo.api.member.service.MemberService;
 import com.spring.demo.domain.member.dto.MemberInformDTO;

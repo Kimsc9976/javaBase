@@ -1,14 +1,12 @@
 package com.spring.demo.api.member.service;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-import com.spring.demo.api.member.dto.BaseResponseDTO;
+import com.spring.demo.api.dto.BaseResponseDTO;
 import com.spring.demo.domain.member.dto.MemberInformDTO;
 import com.spring.demo.domain.member.dto.MemberJoinDTO;
 import com.spring.demo.domain.member.dto.MemberLoginDTO;
 import com.spring.demo.domain.member.entity.Member;
 import com.spring.demo.global.jwt.dto.TokenDTO;
 import com.spring.demo.global.redis.dto.AuthDTO;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
