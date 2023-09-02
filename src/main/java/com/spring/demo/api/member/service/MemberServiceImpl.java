@@ -1,6 +1,7 @@
 package com.spring.demo.api.member.service;
 
 import com.spring.demo.api.member.dto.BaseResponseDTO;
+import com.spring.demo.domain.member.constant.MemberType;
 import com.spring.demo.domain.member.dto.MemberInformDTO;
 import com.spring.demo.domain.member.dto.MemberJoinDTO;
 
@@ -66,7 +67,7 @@ public class MemberServiceImpl implements MemberService{
 
         String encryptedPassword = passwordEncoder.encode(memberInfo.getPassword());
 
-        Member member = memberInfo.toEntity(encryptedPassword);
+        Member member = memberInfo.toEntity(encryptedPassword, MemberType.SOCIAL);
 
         memberRepository.save(member);
 
