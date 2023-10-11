@@ -1,4 +1,4 @@
-package com.spring.demo.domain.member.dto;
+package com.spring.demo.domain.member.dto.RequestDTO;
 
 import lombok.Builder;
 import lombok.Getter;

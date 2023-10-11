@@ -1,8 +1,10 @@
-package com.spring.demo.domain.member.dto;
+package com.spring.demo.domain.member.dto.RequestDTO;
 
 import com.spring.demo.domain.member.constant.MemberType;
 import com.spring.demo.domain.member.entity.Member;
 import com.spring.demo.domain.member.constant.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,25 +14,28 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class MemberJoinDTO {
+
+    @NotBlank(message = "이메일을 입력해주세요")
+    @Email(message = "이메일 형식이 아닙니다.")
     private String email;
+
+    @NotBlank(message = "비밀번호를 입력해주세요")
     private String password;
-    private String name;
+
+    @NotBlank(message = "닉네임을 입력해주세요")
     private String nickname;
 
     @Builder
-    public MemberJoinDTO(String email, String password, String name, String nickname){
+    public MemberJoinDTO(String email, String password, String nickname){
         this.email = email;
         this.password = password;
-        this.name = name;
         this.nickname = nickname;
     }
 
     public Member toEntity(String password, MemberType memberType){
-//        System.out.println("이거 들어가나요");
         return Member.builder()
                 .email(email)
                 .password(password)
-                .name(name)
                 .nickname(nickname)
                 .role(Role.from("USER"))
                 .memberType(memberType)

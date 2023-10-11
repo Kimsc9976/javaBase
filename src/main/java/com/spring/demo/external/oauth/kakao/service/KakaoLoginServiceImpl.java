@@ -1,6 +1,6 @@
 package com.spring.demo.external.oauth.kakao.service;
 
-import com.spring.demo.api.dto.BaseResponseDTO;
+import com.spring.demo.api.common.dto.BaseResponseDTO;
 import com.spring.demo.domain.member.constant.MemberType;
 import com.spring.demo.domain.member.constant.Role;
 import com.spring.demo.domain.member.entity.Member;

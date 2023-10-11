@@ -1,6 +1,6 @@
 package com.spring.demo.external.oauth.naver.service;
 
-import com.spring.demo.api.dto.BaseResponseDTO;
+import com.spring.demo.api.common.dto.BaseResponseDTO;
 import com.spring.demo.domain.member.constant.MemberType;
 import com.spring.demo.domain.member.constant.Role;
 import com.spring.demo.domain.member.entity.Member;
@@ -10,7 +10,6 @@ import com.spring.demo.external.oauth.naver.dto.NaverUserProfileDTO;
 import com.spring.demo.external.oauth.service.LoginService;
 import com.spring.demo.external.oauth.service.OAuthService;
 import com.spring.demo.global.jwt.dto.TokenDTO;
-import com.spring.demo.utils.EncodeStringToUTF8;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

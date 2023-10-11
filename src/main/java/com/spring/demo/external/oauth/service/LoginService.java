@@ -1,6 +1,6 @@
 package com.spring.demo.external.oauth.service;
 
-import com.spring.demo.api.dto.BaseResponseDTO;
+import com.spring.demo.api.common.dto.BaseResponseDTO;
 import com.spring.demo.domain.member.entity.Member;
 import com.spring.demo.domain.member.repository.MemberRepository;
 import com.spring.demo.global.jwt.dto.TokenDTO;

@@ -1,4 +1,4 @@
-package com.spring.demo.domain.common.config;
+package com.spring.demo.global.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

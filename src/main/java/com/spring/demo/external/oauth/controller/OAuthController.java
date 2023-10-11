@@ -1,6 +1,6 @@
 package com.spring.demo.external.oauth.controller;
 
-import com.spring.demo.api.dto.BaseResponseDTO;
+import com.spring.demo.api.common.dto.BaseResponseDTO;
 import com.spring.demo.external.oauth.service.OAuthService;
 import com.spring.demo.external.oauth.service.OAuthServiceFactory;
 import com.spring.demo.global.jwt.dto.TokenDTO;

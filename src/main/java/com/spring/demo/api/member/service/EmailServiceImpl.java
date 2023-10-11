@@ -1,6 +1,6 @@
 package com.spring.demo.api.member.service;
 
-import com.spring.demo.api.dto.BaseResponseDTO;
+import com.spring.demo.api.common.dto.BaseResponseDTO;
 import com.spring.demo.global.redis.service.AuthService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
